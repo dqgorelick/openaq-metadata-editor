@@ -43,7 +43,7 @@ class Home extends React.Component {
   checkHeader (header) {
     const required = [
       'parameter', 'unit', 'value', 'sourceName', 'sourceType',
-      'date/utc', 'date/local', 'mobile', 'location', 'city', 'country'
+      'date', 'mobile', 'location', 'city', 'country'
     ];
     let failures = [];
     required.forEach((prop) => {
