@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
-    "required": ["location", "country", "city", "parameter", "unit", "value", "date", "sourceName", "sourceType", "mobile"],
+    "required": ["location", "country", "city", "parameter", "unit", "value", "date/utc", "date/local", "sourceName", "sourceType", "mobile"],
     "properties": {
         "location": {
             "type": "string",
@@ -15,18 +15,15 @@
             "type": "string",
             "enum": ["µg/m³", "ppm"]
         },
-        "averagingPeriod": {
-            "type": "object",
-            "required": ["value", "unit"],
-            "additionalProperties": false,
-            "properties": {
-                "value": {
-                    "type": "number"
-                },
-                "unit": {
-                    "type": "string",
-                    "enum": ["hours"]
-                }
+        "averagingPeriod/value": {
+            "value": {
+                "type": "number"
+            }
+        },
+        "averagingPeriod/unit": {
+            "unit": {
+                "type": "string",
+                "enum": ["hours"]
             }
         },
         "attribution": {
@@ -47,39 +44,35 @@
                 }
             }
         },
-        "coordinates": {
-            "type": "object",
-            "required": ["latitude", "longitude"],
-            "additionalProperties": false,
-            "properties": {
-                "latitude": {
-                    "type": "number",
-                    "minimum": -90,
-                    "maximum": 90
-                },
-                "longitude": {
-                    "type": "number",
-                    "minimum": -180,
-                    "maximum": 180
-                }
-            }
+        "attribution/name": {
+            "type": "string",
+            "minLength": 1
+        },
+        "attribution/url": {
+            "type": "string",
+            "pattern": "^(https?:\/\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\/\\w \\.-]*)*\/?"
+        },
+
+        "latitude": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+        },
+        "longitude": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
         },
         "value": {
             "type": "number"
         },
-        "date": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": ["utc", "local"],
-            "properties": {
-                "utc": {
-                    "type": "date"
-                },
-                "local": {
-                    "type": "string",
-                    "pattern": "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\+|-)\\d{2}:\\d{2}"
-                }
-            }
+        "date/utc": {
+            "type": "string",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z"
+        },
+        "date/local": {
+            "type": "string",
+            "pattern": "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\+|-)\\d{2}:\\d{2}"
         },
         "sourceName": {
             "type": "string",
@@ -90,7 +83,8 @@
             "enum": ["government", "research", "other"]
         },
         "mobile": {
-            "type": "boolean"
+            "type": ["boolean", "string"],
+            "enum": [true, false, "true", "false"]
         },
         "city": {
             "type": "string",
