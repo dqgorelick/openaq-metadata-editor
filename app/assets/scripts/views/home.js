@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Dropzone from 'react-dropzone';
+
 import measurementSchema from './measurement-schema.json';
 import uploadSchema from './upload-schema.json';
 
@@ -231,11 +233,11 @@ class Home extends React.Component {
     }
   }
 
-  getFile (event) {
+  getFile (files) {
     // Store file reference
-    this.csvFile = event.target.files[0];
+    this.csvFile = files[0];
     this.setState({
-      formFile: this.csvFile.name,
+      formFile: files[0].name,
       status: 'initial',
       metadata: {},
       errors: [],
@@ -247,6 +249,7 @@ class Home extends React.Component {
     console.log('hello')
   }
   render () {
+
     const errors = this.state.errors;
     let errorText = '';
     errors.forEach((error) => {
@@ -276,15 +279,26 @@ class Home extends React.Component {
                 <h2>Validate your data</h2>
                 <p>Guide for formatting your data <a>here</a>. Download a template CSV <a>here</a>. We only accept csv files at this time.</p>
                 <fieldset className='form__fieldset'>
-                  <div className='form__group form__group--upload'>
-                      <input type='file' className='form__control--upload' id='form-file' ref='file' accept='text/plain' onChange={(e) => this.getFile(e)} />
-                      <div className='form__input-group'>
-                        <span className='form__input-group-button'>
-                          <button type='submit' className='button button--base button--text-hidden button--medium button--arrow-up-icon' onClick={() => this.refs.file.click()}></button>
-                        </span>
-                        <input type='text' readOnly className={`form__control form__control--medium ${this.state.fileWarning ? ' error' : ''}`} value={this.state.formFile} onChange={((e) => this.handleFileField(e).bind(this))} />
-                      </div>
-                  </div>
+                  <Dropzone accept='text/*, application/vnd.ms-excel,' onDrop={acceptedFiles => {
+                    console.log(acceptedFiles)
+                    this.getFile(acceptedFiles)
+                  }}>
+                    {({getRootProps, getInputProps}) => (
+                      <section>
+                        <div className="upload-drop-area" {...getRootProps()}>
+                          <input {...getInputProps()} />
+                          <p>Drag and drop .csv file here, or click to select files</p>
+                        </div>
+                      </section>
+                    )}
+                  </Dropzone>
+                  { this.csvFile ?
+                    <div>
+                      <p>File: {this.csvFile.name}</p>
+                    </div>
+                    : 
+                    <div></div>
+                  }
                   <p>Verifying your data will all be performed in the browser – data will not be uploaded in this step.</p>
                   <button className='button button--primary button--verify' type='button' onClick={this.handleVerifyClick.bind(this)}>
                     <span>Verify</span>
