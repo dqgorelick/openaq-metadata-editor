@@ -257,7 +257,7 @@ class Home extends React.Component {
     });
     const errorMsg = errors.length
       ? <div className='form__group'>
-          <p className='error'><b>{`${errors.length} error${errors.length === 1 ? '' : 's'} `}</b>found.</p>
+          <p className='error'>Notes: <b>{`${errors.length} error${errors.length === 1 ? '' : 's'} `}</b>found.</p>
           <textarea readOnly className='form__control' id='form-textarea' rows='7' defaultValue={errorText}></textarea>
         </div>
       : '';
@@ -287,18 +287,15 @@ class Home extends React.Component {
                       <section>
                         <div className="upload-drop-area" {...getRootProps()}>
                           <input {...getInputProps()} />
-                          <p>Drag and drop .csv file here, or click to select files</p>
+                          { this.csvFile ?
+                              <p><strong>File: {this.csvFile.name}</strong> or select a different file.</p>
+                            : 
+                            <p><strong>Choose a CSV file</strong> or drag and drop here</p>
+                          }
                         </div>
                       </section>
                     )}
                   </Dropzone>
-                  { this.csvFile ?
-                    <div>
-                      <p>File: {this.csvFile.name}</p>
-                    </div>
-                    : 
-                    <div></div>
-                  }
                   <p>Verifying your data will all be performed in the browser – data will not be uploaded in this step.</p>
                   <button className='button button--primary button--verify' type='button' onClick={this.handleVerifyClick.bind(this)}>
                     <span>Verify</span>
@@ -327,7 +324,6 @@ class Home extends React.Component {
                 {
                   this.state.errors.length > 0 ?
                   <div>
-                    <p>Notes:</p>
                     {errorMsg}
                   </div>
                   :
