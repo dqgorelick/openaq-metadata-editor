@@ -15,6 +15,7 @@ class App extends React.Component {
       // In case there is any error, on next load the user will be logged out.
       localStorage.setItem('isLoggedIn', 'false');
       // Once the session is renewed, the flag will be set again.
+      console.log('renewing session?')
       auth.renewSession();
     }
   }

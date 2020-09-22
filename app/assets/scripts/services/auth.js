@@ -21,6 +21,8 @@ class Auth {
       scope: 'openid profile'
     });
 
+    console.log('auth config:', config)
+
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
@@ -67,7 +69,7 @@ class Auth {
   setSession (authResult) {
     // Set isLoggedIn flag in localStorage
     localStorage.setItem('isLoggedIn', 'true');
-
+    console.log('authResult', authResult)
     // Set the time that the access token will expire at
     let expiresAt = (authResult.expiresIn * 1000) + new Date().getTime();
     this.accessToken = authResult.accessToken;
@@ -87,15 +89,20 @@ class Auth {
   }
 
   renewSession () {
-    this.auth0.checkSession({}, (err, authResult) => {
-      if (authResult && authResult.accessToken && authResult.idToken) {
-        this.setSession(authResult);
-      } else if (err) {
-        this.logout();
-        store.dispatch(loginUserError(err));
-        console.error('error renewing session', err);
-      }
-    });
+    console.log('renewing session')
+    // if (this.userProfile) {
+      this.auth0.checkSession({}, (err, authResult) => {
+        console.log(authResult)
+        if (authResult && authResult.accessToken && authResult.idToken) {
+          console.log('success')
+          this.setSession(authResult);
+        } else if (err) {
+          // this.logout();
+          // store.dispatch(loginUserError(err));
+          console.error('error renewing session', err);
+        }
+      });
+    // }
   }
 
   logout () {

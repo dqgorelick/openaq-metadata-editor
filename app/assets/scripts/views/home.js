@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import Dropzone from 'react-dropzone';
 
+import auth from '../services/auth';
+
 import measurementSchema from './measurement-schema.json';
 import uploadSchema from './upload-schema.json';
 
@@ -279,10 +281,17 @@ class Home extends React.Component {
                 <h2>Validate your data</h2>
                 <p>Guide for formatting your data <a>here</a>. Download a template CSV <a>here</a>. We only accept csv files at this time.</p>
                 <fieldset className='form__fieldset'>
-                  <Dropzone accept='text/*, application/vnd.ms-excel,' onDrop={acceptedFiles => {
-                    console.log(acceptedFiles)
-                    this.getFile(acceptedFiles)
-                  }}>
+                  <Dropzone 
+                    accept='text/*, application/vnd.ms-excel,' 
+                    onDropAccepted={acceptedFile => {
+                      console.log(acceptedFile)
+                      this.getFile(acceptedFile)
+                    }}
+                    onDropRejected={rejectedFile => {
+                      console.log(rejectedFile)
+                    }}
+                    multiple={false}
+                  >
                     {({getRootProps, getInputProps}) => (
                       <section>
                         <div className="upload-drop-area" {...getRootProps()}>
@@ -299,6 +308,9 @@ class Home extends React.Component {
                   <p>Verifying your data will all be performed in the browser – data will not be uploaded in this step.</p>
                   <button className='button button--primary button--verify' type='button' onClick={this.handleVerifyClick.bind(this)}>
                     <span>Verify</span>
+                  </button>
+                  <button className='button button--primary button--verify' type='button' onClick={auth.renewSession}>
+                    <span>Test Auth</span>
                   </button>
                 </fieldset>
               </section>
