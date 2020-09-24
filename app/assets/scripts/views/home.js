@@ -34,17 +34,21 @@ class Home extends React.Component {
     this.csvFile = undefined
   }
 
-  setErrorState (failures, metadata) {
+  verifyData(failures, metadata) {
     if (failures.length) {
       this.setState({
         status: 'verifyErr',
         metadata: metadata,
-        errors: failures});
+        errors: failures,
+        menuState: 1
+      });
     } else {
       this.setState({
         status: 'verifySucc',
         metadata: metadata,
-        errors: failures});
+        errors: failures,
+        menuState: 1
+      });
     }
     return;
   }
@@ -91,13 +95,13 @@ class Home extends React.Component {
           // Check for data;
           if (!data || data === {}) {
             failures = ['No data provided'];
-            this.setErrorState(failures);
+            this.verifyData(failures);
           }
           if (line === 0 && !failures.length) {
             // Check header on first line
             failures = failures.concat(this.checkHeader(data));
             if (failures.length) {
-              this.setErrorState(failures);
+              this.verifyData(failures);
             }
           }
 
@@ -210,12 +214,11 @@ class Home extends React.Component {
           metadata.measurements = line;
           console.log(line)
           console.log(failures)
-          this.setErrorState(failures, metadata);
+          this.verifyData(failures, metadata);
           if (!failures.length) {
             // If no failures, convert record array to CSV
             // this.csvOutput = this.writeCsv(records);
           }
-          this.setState({menuState: 1})
         });
     }
   }
@@ -306,7 +309,7 @@ class Home extends React.Component {
                     )}
                   </Dropzone>
                   <p>Verifying your data will all be performed in the browser – data will not be uploaded in this step.</p>
-                  <button className='button button--primary button--verify' type='button' onClick={this.handleVerifyClick.bind(this)}>
+                  <button disabled={!this.csvFile} className='button button--primary button--verify' type='button' onClick={this.handleVerifyClick.bind(this)}>
                     <span>Verify</span>
                   </button>
                   <button className='button button--primary button--verify' type='button' onClick={auth.renewSession}>

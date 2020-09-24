@@ -69,7 +69,7 @@ class Auth {
   setSession (authResult) {
     // Set isLoggedIn flag in localStorage
     localStorage.setItem('isLoggedIn', 'true');
-    console.log('authResult', authResult)
+    console.log(authResult)
     // Set the time that the access token will expire at
     let expiresAt = (authResult.expiresIn * 1000) + new Date().getTime();
     this.accessToken = authResult.accessToken;
@@ -89,20 +89,15 @@ class Auth {
   }
 
   renewSession () {
-    console.log('renewing session')
-    // if (this.userProfile) {
-      this.auth0.checkSession({}, (err, authResult) => {
-        console.log(authResult)
-        if (authResult && authResult.accessToken && authResult.idToken) {
-          console.log('success')
-          this.setSession(authResult);
-        } else if (err) {
-          // this.logout();
-          // store.dispatch(loginUserError(err));
-          console.error('error renewing session', err);
-        }
-      });
-    // }
+    this.auth0.checkSession({}, (err, authResult) => {
+      if (authResult && authResult.accessToken && authResult.idToken) {
+        this.setSession(authResult);
+      } else if (err) {
+        console.error('error renewing session', err);
+        this.logout();
+        store.dispatch(loginUserError(err));
+      }
+    });
   }
 
   logout () {
