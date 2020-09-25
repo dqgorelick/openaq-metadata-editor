@@ -3,9 +3,7 @@ import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import config from '../config';
 
-import locations from './locations/reducers';
 import user from './user/reducers';
-import filters from './filters/reducers';
 
 const logger = createLogger({
   level: 'info',
@@ -34,9 +32,7 @@ const composedEnhancers = compose(
 );
 
 const reducer = combineReducers({
-  locations,
-  user,
-  filters
+  user
 });
 
 const store = createStore(reducer, initialState, composedEnhancers);

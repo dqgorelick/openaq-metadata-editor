@@ -14,6 +14,7 @@ import fileReaderStream from 'filereader-stream';
 import csv from 'csv-parser'
 
 import Header from '../components/header';
+import UploadTool from '../components/upload-form'
 
 class Home extends React.Component {
   constructor (props) {
@@ -276,6 +277,7 @@ class Home extends React.Component {
             <p>Apply for an account or Test your data below</p>
           </div>
         </Header>
+        <UploadTool></UploadTool>
         <main role='main'>
           <div className="inner">
             {
@@ -309,12 +311,16 @@ class Home extends React.Component {
                     )}
                   </Dropzone>
                   <p>Verifying your data will all be performed in the browser – data will not be uploaded in this step.</p>
-                  <button disabled={!this.csvFile} className='button button--primary button--verify' type='button' onClick={this.handleVerifyClick.bind(this)}>
-                    <span>Verify</span>
-                  </button>
-                  <button className='button button--primary button--verify' type='button' onClick={auth.renewSession}>
-                    <span>Test Auth</span>
-                  </button>
+                  <div>
+                    <button disabled={!this.csvFile} className='button button--primary button--verify' type='button' onClick={this.handleVerifyClick.bind(this)}>
+                      <span>Verify</span>
+                    </button>
+                  </div>
+                  <div>
+                    <button className='button button--primary button--verify' type='button' onClick={auth.renewSession}>
+                      <span>Test Auth</span>
+                    </button>
+                  </div>
                 </fieldset>
               </section>
               : this.state.menuState === 1 ?
