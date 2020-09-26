@@ -14,7 +14,7 @@ import fileReaderStream from 'filereader-stream';
 import csv from 'csv-parser'
 
 import Header from '../components/header';
-import UploadTool from '../components/upload-form'
+// import UploadTool from '../components/upload-form'
 
 class Home extends React.Component {
   constructor (props) {
@@ -255,7 +255,6 @@ class Home extends React.Component {
     console.log('hello')
   }
   render () {
-
     const errors = this.state.errors;
     let errorText = '';
     errors.forEach((error) => {
@@ -277,7 +276,6 @@ class Home extends React.Component {
             <p>Apply for an account or Test your data below</p>
           </div>
         </Header>
-        <UploadTool></UploadTool>
         <main role='main'>
           <div className="inner">
             {
