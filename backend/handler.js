@@ -63,13 +63,10 @@ module.exports.auth = (event, context, callback) => {
 
 // Public API
 module.exports.publicEndpoint = (event, context, callback) => {
-  console.log('PUBLIC HERE', event, context)
   callback(null, {
     statusCode: 200,
     headers: {
-        /* Required for CORS support to work */
       'Access-Control-Allow-Origin': '*',
-        /* Required for cookies, authorization headers with HTTPS */
       'Access-Control-Allow-Credentials': true,
     },
     body: JSON.stringify({
@@ -80,7 +77,6 @@ module.exports.publicEndpoint = (event, context, callback) => {
 
 // Private API
 module.exports.privateEndpoint = (event, context, callback) => {
-  console.log('PRIVATE HERE', event, context)
   const dateString = new Date().toISOString()
 
   s3.putObject(
@@ -90,21 +86,21 @@ module.exports.privateEndpoint = (event, context, callback) => {
       Body: event.body.data,
       ContentType: "application/octet-stream"
     },
-    function (err,data) {
-      console.log(JSON.stringify(err) + " " + JSON.stringify(data));
-      callback(null, {
-        statusCode: 200,
-        headers: {
-            /* Required for CORS support to work */
-          'Access-Control-Allow-Origin': '*',
-            /* Required for cookies, authorization headers with HTTPS */
-          'Access-Control-Allow-Credentials': true,
-        },
-        body: JSON.stringify({
-          message: err ? JSON.stringify(err) : 'Uploaded!'
-          // message: 'success!'
-        }),
-      });
+    function (err, data) {
+      if (err) {
+        callback('Unauthorized, please log in')
+      } else {
+        callback(null, {
+          statusCode: 200,
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Credentials': true,
+            },
+          body: JSON.stringify({
+            message: 'Uploaded!'
+          }),
+        });
+      }
     }
   );
 }

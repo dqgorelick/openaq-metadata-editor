@@ -4,6 +4,7 @@ import { createLogger } from 'redux-logger';
 import config from '../config';
 
 import user from './user/reducers';
+import uploadData from './upload/reducers'
 
 const logger = createLogger({
   level: 'info',
@@ -32,7 +33,8 @@ const composedEnhancers = compose(
 );
 
 const reducer = combineReducers({
-  user
+  user,
+  uploadData
 });
 
 const store = createStore(reducer, initialState, composedEnhancers);

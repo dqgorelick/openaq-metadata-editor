@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 
 import Dropzone from 'react-dropzone';
 
-import auth from '../services/auth';
+import auth from '../services/auth'
+
+import { uploadData } from '../state/upload/actions'
 
 import measurementSchema from './measurement-schema.json';
 import uploadSchema from './upload-schema.json';
@@ -70,6 +72,7 @@ class Home extends React.Component {
   }
 
   writeCsv (records) {
+    console.log('writing')
     const header = Object.keys(records[0]);
     let csv = records.map(row => header.map(fieldName => JSON.stringify(row[fieldName])).join(','));
     csv.unshift(header.join(','));
@@ -123,6 +126,7 @@ class Home extends React.Component {
             failures.push(`Record ${line}: ${e.property.replace('instance.', '')} (${e.instance}) ${e.message}`);
           });
 
+          records.push(record)
           line++;
 
 
@@ -214,15 +218,23 @@ class Home extends React.Component {
         .on('end', () => {
           metadata.measurements = line;
           console.log(line)
-          console.log(failures)
+          console.log(failures, !failures.length)
           this.verifyData(failures, metadata);
           if (!failures.length) {
             // If no failures, convert record array to CSV
-            // this.csvOutput = this.writeCsv(records);
+            this.csvOutput = this.writeCsv(records);
+            console.log(this.csvOutput)
           }
         });
     }
   }
+
+  handleUploadClick () {
+    console.log('uploading data')
+    console.log(this.csvOutput)
+    this.props.uploadData(this.csvOutput)
+  }
+
 
   handleFileField () {
     this.csvFile ? this.setState({fileWarning: false}) : this.setState({fileWarning: true});
@@ -351,6 +363,9 @@ class Home extends React.Component {
                   <button className='button button--primary button--verify' type='button' onClick={()=>{this.setState({menuState: 0})}}>
                     <span>Update file</span>
                   </button>
+                  <button className='button button--primary button--verify' type='button' onClick={this.handleUploadClick.bind(this)}>
+                    <span>Upload</span>
+                  </button>
                 </fieldset>
               </section>
               : <div></div>
@@ -365,10 +380,16 @@ class Home extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    uploaded: state.uploadData.uploaded,
+    uploadSuccess: state.uploadData.uploadSuccess,
+    uploadFailed: state.uploadData.uploadFailed,
+    uploadResponse: state.uploadData.success,
+    uploadError: state.uploadData.error
   };
 };
 
 const mapDispatchToProps = {
+  uploadData
 };
 
 export default connect(
