@@ -78,12 +78,13 @@ module.exports.publicEndpoint = (event, context, callback) => {
 // Private API
 module.exports.privateEndpoint = (event, context, callback) => {
   const dateString = new Date().toISOString()
-
+  const body = JSON.parse(event.body)
+    
   s3.putObject(
     {
       Bucket: 'upload-tool-bucket-dev',
       Key: `uploaded_${dateString}.csv`,
-      Body: event.body.data,
+      Body: body.data,
       ContentType: "application/octet-stream"
     },
     function (err, data) {
