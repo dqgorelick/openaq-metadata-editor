@@ -2,7 +2,7 @@ import * as constants from './constants';
 
 const initialState = {
     uploading: false,
-    uploadedSuccess: false,
+    uploadSuccess: false,
     uploadFailed: false,
     success: null,
     error: null
@@ -20,7 +20,7 @@ function reducer(state = initialState, action) {
         case constants.UPLOAD_DATA_SUCCESS: {
             return {
                 ...initialState,
-                uploadedSuccess: true,
+                uploadSuccess: true,
                 success: action.data
             }
         }

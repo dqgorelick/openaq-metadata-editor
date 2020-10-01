@@ -1,4 +1,4 @@
-.header-wrapper {
+.header-wrapper, .form-wrapper {
     max-width: 800px;
     margin: 0 auto;
     text-align: left;
@@ -6,6 +6,10 @@
 
 .section-wrapper {
     margin: 2rem auto 1rem;
+}
+
+.form-content {
+  padding: 32px;
 }
 
 .upload-status {
@@ -74,4 +78,16 @@
   
   input:read-only, textarea:read-only {
       color: initial;
+  }
+
+  .page__footer {
+    .copyright {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .heart::before {
+      @extend %openaq-ds-icon-heart-full;
+      opacity: 0.8;
+      vertical-align: middle;
+    }
   }

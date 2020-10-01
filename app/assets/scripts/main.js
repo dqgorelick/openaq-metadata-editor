@@ -6,6 +6,8 @@ import { Router, Route, Switch } from 'react-router-dom';
 import App from './views/app';
 import NoMatch from './views/404';
 import Home from './views/home';
+import CreateAccount from './views/apply';
+import Format from './views/format';
 import Callback from './views/callback';
 import GlobalMessage from './views/global-message';
 
@@ -67,11 +69,8 @@ class Root extends Component {
           <App>
             <Switch>
               <Route exact path='/' component={Home} />
-              <PrivateRoute
-                exact
-                path='/test'
-                component={Home} 
-              />
+              <Route exact path='/account' component={CreateAccount} />
+              <Route exact path='/format' component={Format} />
               <Route
                 path='/callback'
                 render={props => {

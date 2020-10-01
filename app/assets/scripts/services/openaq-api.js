@@ -43,6 +43,10 @@ function request (method, url, params = {}) {
     })
 }
 
+function getTotalMeasurements () {
+  return request('GET', `${apiUrl}/v1/measurements`, {limit: 0})
+}
+
 function putUploadToolData (data) {
   return request('POST', uploadUrl, {
     data: data
@@ -50,5 +54,6 @@ function putUploadToolData (data) {
 }
 
 export default {
-  putUploadToolData
+  putUploadToolData,
+  getTotalMeasurements
 };
